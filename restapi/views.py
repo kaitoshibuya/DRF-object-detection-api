@@ -3,14 +3,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import list_route
 from rest_framework import status
 from .models import Item
-from .serializer import ManyItemsSerializers
+from .serializer import ManyItemsSerializer
 from item_detection.detection import item_detection
 from chainercv.datasets import voc_bbox_label_names
 
 
 class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()
-    serializer_class = ManyItemsSerializers
+    serializer_class = ManyItemsSerializer
 
     @list_route(methods=["post"])
     def detection(self, request):
@@ -27,7 +27,7 @@ class ItemViewSet(viewsets.ModelViewSet):
             item = Item(name=name, image=img, score=score)
             item.save()
 
-        serializer = ManyItemsSerializers(data={"name": "items"})
+        serializer = ManyItemsSerializer(data={"name": "items"})
 
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
